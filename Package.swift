@@ -1,49 +1,123 @@
 // swift-tools-version:5.3
+
 import PackageDescription
 
+/// Slates: swift-tree-sitter + two library products (TypeScript and TSX).
 let package = Package(
-  name: "TreeSitterTypeScript",
-  products: [
-    .library(name: "TreeSitterTypeScript", targets: ["TreeSitterTypeScript", "TreeSitterTSX"]),
-  ],
-  dependencies: [
-    .package(url: "https://github.com/ChimeHQ/SwiftTreeSitter", from: "0.8.0"),
-  ],
-  targets: [
-    .target(
-      name: "TreeSitterTypeScript",
-      path: ".",
-      sources: [
-        "typescript/src/parser.c",
-        "typescript/src/scanner.c",
-      ],
-      resources: [
-        .copy("queries")
-      ],
-      publicHeadersPath: "bindings/swift/typescript",
-      cSettings: [.headerSearchPath("typescript/src")]
-    ),
-    .target(
-      name: "TreeSitterTSX",
-      path: ".",
-      sources: [
-        "tsx/src/parser.c",
-        "tsx/src/scanner.c",
-      ],
-      resources: [
-        .copy("queries")
-      ],
-      publicHeadersPath: "bindings/swift/tsx",
-      cSettings: [.headerSearchPath("tsx/src")]
-    ),
-    .testTarget(
-      name: "TreeSitterTypeScriptTests",
-      dependencies: [
-        "SwiftTreeSitter",
-        "TreeSitterTypeScript",
-        "TreeSitterTSX",
-      ],
-      path: "bindings/swift/TreeSitterTypeScriptTests"
-    )
-  ]
+    name: "TreeSitterTypeScript",
+    products: [
+        .library(name: "TreeSitterTypeScript", targets: ["TreeSitterTypeScript"]),
+        .library(name: "TreeSitterTSX", targets: ["TreeSitterTSX"]),
+    ],
+    dependencies: [
+        .package(name: "SwiftTreeSitter", url: "https://github.com/tree-sitter/swift-tree-sitter", from: "0.9.0"),
+    ],
+    targets: [
+        .target(
+            name: "TreeSitterTypeScript",
+            dependencies: [],
+            path: ".",
+            exclude: [
+                "binding.gyp",
+                "bindings/c",
+                "bindings/go",
+                "bindings/node",
+                "bindings/python",
+                "bindings/rust",
+                "Cargo.toml",
+                "Cargo.lock",
+                "CMakeLists.txt",
+                "common",
+                "eslint.config.mjs",
+                "examples",
+                "go.mod",
+                "go.sum",
+                "LICENSE",
+                "Makefile",
+                "package-lock.json",
+                "package.json",
+                "pyproject.toml",
+                "README.md",
+                "setup.py",
+                "test",
+                "tree-sitter.json",
+                "tsx",
+                "typescript/grammar.js",
+                "typescript/package.json",
+                "typescript/CMakeLists.txt",
+                "typescript/Makefile",
+                "typescript/src/grammar.json",
+                "typescript/src/node-types.json",
+                "bindings/swift/TreeSitterTypeScriptTests",
+                "bindings/swift/tsx",
+            ],
+            sources: [
+                "typescript/src/parser.c",
+                "typescript/src/scanner.c",
+            ],
+            resources: [
+                .copy("queries"),
+            ],
+            publicHeadersPath: "bindings/swift/typescript/TreeSitterTypeScript",
+            cSettings: [.headerSearchPath("typescript/src")],
+        ),
+        .target(
+            name: "TreeSitterTSX",
+            dependencies: [],
+            path: ".",
+            exclude: [
+                "binding.gyp",
+                "bindings/c",
+                "bindings/go",
+                "bindings/node",
+                "bindings/python",
+                "bindings/rust",
+                "Cargo.toml",
+                "Cargo.lock",
+                "CMakeLists.txt",
+                "common",
+                "eslint.config.mjs",
+                "examples",
+                "go.mod",
+                "go.sum",
+                "LICENSE",
+                "Makefile",
+                "package-lock.json",
+                "package.json",
+                "pyproject.toml",
+                "README.md",
+                "setup.py",
+                "test",
+                "tree-sitter.json",
+                "typescript",
+                "tsx/grammar.js",
+                "tsx/package.json",
+                "tsx/CMakeLists.txt",
+                "tsx/Makefile",
+                "tsx/src/grammar.json",
+                "tsx/src/node-types.json",
+                "bindings/swift/TreeSitterTypeScriptTests",
+                "bindings/swift/typescript",
+            ],
+            sources: [
+                "tsx/src/parser.c",
+                "tsx/src/scanner.c",
+            ],
+            resources: [
+                .copy("queries"),
+            ],
+            publicHeadersPath: "bindings/swift/tsx/TreeSitterTSX",
+            cSettings: [.headerSearchPath("tsx/src")],
+        ),
+        .testTarget(
+            name: "TreeSitterTypeScriptTests",
+            dependencies: [
+                "SwiftTreeSitter",
+                "TreeSitterTypeScript",
+                "TreeSitterTSX",
+            ],
+            path: "bindings/swift/TreeSitterTypeScriptTests",
+        ),
+    ],
+    cLanguageStandard: .c11,
 )
